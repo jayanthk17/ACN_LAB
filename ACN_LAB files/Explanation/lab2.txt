@@ -1,0 +1,28 @@
+1. Change in Default Transport Protocol:
+Original: The default transport protocol was set to TCP.
+New: The default transport protocol is now set to UDP.
+2. Increase in Number of Nodes:
+Original: The topology included only 2 nodes (n0 and n1).
+New: The topology now includes 4 nodes (n0, n1, n2, n3).
+3. Expansion of Network Topology:
+Original: Only a single point-to-point link was defined between two nodes.
+New: Multiple point-to-point links are set up between the nodes, creating a chain (n0-n1, n1-n2, n2-n3).
+4. Multiple IP Address Configuration:
+Original: A single IP network was used (10.1.1.0).
+New: Multiple IP networks are configured (10.1.1.0, 10.1.2.0, 10.1.3.0), each assigned to different sets of nodes.
+5. Introduction of Global Routing:
+Original: No explicit global routing configuration.
+New: Ipv4GlobalRoutingHelper::PopulateRoutingTables() is used to facilitate routing between the newly configured multiple networks.
+6. Inclusion of TCP Traffic Simulation:
+Original: Only the transport protocol chosen via command line (TCP or UDP) was used for the flow setup.
+New: Both UDP and TCP flows are explicitly set up and simulated. UDP flows between n0 and n3, and TCP flows between n0 and n2.
+7. Modification in Application Setup:
+Original: A single application flow was defined.
+New: Two distinct application flows are set up, one for each transport protocol (TCP and UDP), utilizing different ports.
+8. Flow Monitoring Adjustments:
+Original: Standard flow monitoring and reporting.
+New: Enhanced and detailed flow monitoring reports are generated, including flow identification and extended statistics.
+9. Addition of Custom Routing Logic:
+New: The code now includes logic to specify different remote addresses for TCP and UDP flows, which is a part of a more complex network setup.
+Summary:
+The new code has been significantly expanded to demonstrate a more complex and realistic simulation environment. It features a more intricate network topology, dual transport protocol testing, and detailed network performance analysis, which are all useful for studying the behavior and performance of network protocols and configurations in a controlled simulation. This transition reflects a shift from a simple two-node direct connection scenario to a more sophisticated multi-node, multi-protocol configuration, highlighting different aspects of network theory such as routing, congestion, and traffic management.

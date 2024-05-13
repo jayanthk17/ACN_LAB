@@ -1,0 +1,147 @@
+CLIENT TCP(SOCKET PGM)
+#include <stdio.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main()
+{
+    int soc, n;
+    char buffer[1024], fname[50];
+    struct sockaddr_inaddr;
+
+    /*  socket creates an endpoint for communication and returns a file descriptor */
+    soc = socket(PF_INET, SOCK_DGRAM, 0);
+
+    /*
+     * sockaddr_in is used for ip manipulation
+     * we define the port and IP for the connection.
+     */
+addr.sin_family = AF_INET;
+addr.sin_port = htons(7891);
+addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+    /*  keep trying to esatablish connection with server */
+
+printf("\nClient is connected to Server");
+printf("\nEnter file name: ");
+scanf("%s", fname);
+    /*  send the filename to the server */
+sendto(soc, fname, sizeof(fname), 0,(struct sockaddr*)&addr, sizeof(addr));
+
+printf("\nRecieved response\n");
+    /*  keep printing any data received from the server */
+    while ((n = recvfrom(soc, buffer, sizeof(buffer), 0,(struct sockaddr*)&addr, sizeof(addr))) > 0)
+printf("%s", buffer);
+ close(soc);
+    return 0;
+}
+
+
+SERVER TCP
+#include <stdio.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main()
+{
+    int welcome, new_soc, fd, n;
+    char buffer[1024], fname[50];
+    struct sockaddr_inaddr;
+
+    welcome = socket(PF_INET, SOCK_DGRAM, 0);
+
+addr.sin_family = AF_INET;
+addr.sin_port = htons(7891);
+addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+bind(welcome, (struct sockaddr *) &addr, sizeof(addr));
+printf("\nServer is Online");
+recvfrom(welcome, fname,50, 0,(struct sockaddr*)&addr, sizeof(addr));
+    /*  receive the filename */
+printf("\nRequesting for file: %s\n", fname);
+
+    /*  open the file and send its contents */
+fd = open(fname, O_RDONLY);
+
+    if (fd< 0)
+// send
+sendto(welcome, "\nFile not found\n", 15,0,(struct sockaddr*)&addr, sizeof(addr));
+    else
+        while ((n = read(fd, buffer, sizeof(buffer))) > 0)
+sendto(welcome,buffer, n,0,(struct sockaddr*)&addr, sizeof(addr));
+printf("\nRequest sent\n");
+    close(fd);
+
+    return 0;
+}
+
+
+ CLIENT UDP(SOCKET PGM)
+#include <stdio.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main()
+{
+    int soc, n;
+    char buffer[1024], msg[100];
+    struct sockaddr_inaddr;
+
+    /*  socket creates an endpoint for communication and returns a file descriptor */
+    soc = socket(PF_INET, SOCK_DGRAM, 0);
+
+    /*
+     * sockaddr_in is used for ip manipulation
+     * we define the port and IP for the connection.
+     */
+addr.sin_family = AF_INET;
+addr.sin_port = htons(7891);
+addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+    /*  keep trying to esatablish connection with server */
+
+printf("\nClient is connected to Server");
+printf("\nEnter message: ");
+scanf("%s",  msg);
+    /*  send the filename to the server */
+	sendto(soc, msg, sizeof(msg), 0,(struct sockaddr*)&addr, sizeof(addr));
+    close(soc);
+    return 0;
+}
+
+
+SERVER UDP
+#include <stdio.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main()
+{
+    int welcome, new_soc, fd, n;
+    char buffer[1024], msg[100];
+    struct sockaddr_inaddr;
+
+    welcome = socket(PF_INET, SOCK_DGRAM, 0);
+
+addr.sin_family = AF_INET;
+addr.sin_port = htons(7891);
+addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+bind(welcome, (struct sockaddr *) &addr, sizeof(addr));
+printf("\nServer is Online");
+recvfrom(welcome, msg,100, 0,(struct sockaddr*)&addr, sizeof(addr));
+printf("Message: %s",msg);
+	
+//	sendto(welcome,msg, sizeof(msg),0,(struct sockaddr*)&addr, sizeof(addr));
+
+
+
+    close(welcome);
+
+    return 0;
+}
+
